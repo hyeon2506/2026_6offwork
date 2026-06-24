@@ -1865,20 +1865,11 @@ border:1px solid #aa77ff;
 <div class="seat-map-section">
   <div class="seat-map-title">MY SEATS</div>
 
-  <!-- 층 탭 -->
-  <div class="floor-tabs">
-    <button class="floor-tab active" onclick="switchFloor(1)">1층</button>
-    <button class="floor-tab" onclick="switchFloor(2)">2층</button>
-    <button class="floor-tab" onclick="switchFloor(3)">3층</button>
-  </div>
-
   <!-- 무대 -->
   <div class="stage-box">STAGE</div>
 
   <!-- 배치도 -->
   <div id="seatMapFloor1" class="floor-map"></div>
-  <div id="seatMapFloor2" class="floor-map" style="display:none;"></div>
-  <div id="seatMapFloor3" class="floor-map" style="display:none;"></div>
 
   <!-- 범례 -->
   <div class="seat-legend" id="seatLegend">
@@ -1907,61 +1898,29 @@ const ACTOR_NAMES={
 /* ── 좌석 데이터: 블럭별로 명시적 정의 ── */
 function mkR(s,e){var a=[];for(var i=s;i<e;i++)a.push(i);return a;}
 
-/* 1층: 통로 위치 = 15|16 사이, 31or32|34 사이 (33번 없음) */
+/* 통로 위치 = 15|16 사이 */
 var F1_BLOCKS = {
-  1: {L:mkR(8,16),  C:mkR(16,32), R:mkR(34,42)},
-  2: {L:mkR(7,16),  C:mkR(16,33), R:mkR(34,43)},
-  3: {L:mkR(6,16),  C:mkR(16,32), R:mkR(34,44)},
-  4: {L:mkR(6,16),  C:mkR(16,33), R:mkR(34,44)},
-  5: {L:mkR(5,16),  C:mkR(16,32), R:mkR(34,45)},
-  6: {L:mkR(4,16),  C:mkR(16,33), R:mkR(34,46)},
-  7: {L:mkR(3,16),  C:mkR(16,32), R:mkR(34,47)},
-  8: {L:mkR(1,16),  C:mkR(16,32), R:mkR(34,49)},
-  9: {L:mkR(1,16),  C:mkR(16,33), R:mkR(34,49)},
-  10:{L:mkR(1,16),  C:mkR(16,32), R:mkR(34,49)},
-  11:{L:mkR(1,16),  C:mkR(16,33), R:mkR(34,49)},
-  12:{L:mkR(1,16),  C:mkR(16,32), R:mkR(34,49)},
-  13:{L:mkR(1,16),  C:mkR(16,33), R:mkR(34,49)},
-  14:{L:mkR(1,16),  C:mkR(16,32), R:mkR(34,49)},
-  15:{L:mkR(1,16),  C:mkR(16,33), R:mkR(34,49)},
-  16:{L:mkR(1,16),  C:mkR(16,32), R:mkR(34,49)},
-  17:{L:mkR(1,16),  C:mkR(16,33), R:mkR(34,49)},
-  18:{L:mkR(1,16),  C:mkR(16,32), R:mkR(34,49)},
-  19:{L:mkR(1,16),  C:mkR(16,33), R:mkR(34,49)},
-  20:{L:mkR(1,16),  C:mkR(16,32), R:mkR(34,49)},
-  21:{L:mkR(1,16),  C:mkR(16,33), R:mkR(34,49)},
-  22:{L:mkR(1,16),  C:mkR(16,32), R:mkR(34,49)}
+  // 1~7열: 동일 구조
+  1: { L: mkR(1, 11), R: mkR(1, 10) }, // 1~11 / 1~10
+  2: { L: mkR(1, 11), R: mkR(1, 10) },
+  3: { L: mkR(1, 11), R: mkR(1, 10) },
+  4: { L: mkR(1, 11), R: mkR(1, 10) },
+  5: { L: mkR(1, 11), R: mkR(1, 10) },
+  6: { L: mkR(1, 11), R: mkR(1, 10) },
+  7: { L: mkR(1, 11), R: mkR(1, 10) },
+  8: { L: mkR(3, 11), R: mkR(1, 9) },
+
+  // 9~11열 구조 유지 (현재 코드 그대로 사용)
+  9:  { L: mkR(1, 13) },
+  10: { L: mkR(1, 13) },
+  11: { L: mkR(1, 13) },
 };
 
-/* 2층: 통로 = 15|16 사이, 31|32 사이 (gap 없음) */
-var F2_BLOCKS = {
-  1: {L:mkR(1,16),  C:mkR(16,32), R:mkR(32,47)},
-  2: {L:mkR(1,16),  C:mkR(16,32), R:mkR(32,47)},
-  3: {L:mkR(1,16),  C:mkR(16,32), R:mkR(32,47)},
-  4: {L:mkR(1,16),  C:mkR(16,32), R:mkR(32,47)},
-  5: {L:mkR(1,16),  C:mkR(16,32), R:mkR(32,47)},
-  6: {L:mkR(3,16),  C:mkR(16,30), R:mkR(32,45)},
-  7: {L:mkR(3,16),  C:mkR(16,29), R:mkR(32,45)},
-  8: {L:mkR(3,16),  C:mkR(16,29), R:mkR(32,45)},
-  9: {L:mkR(3,16),  C:mkR(16,29), R:mkR(32,45)},
-  10:{L:mkR(1,16),  C:mkR(16,29), R:mkR(32,47)}
-};
-
-/* 3층: 통로 = 16|17 사이, 32|33 사이 */
-var F3_BLOCKS = {
-  1: {L:mkR(2,17),  C:mkR(17,33), R:mkR(33,48)},
-  2: {L:mkR(2,17),  C:mkR(17,33), R:mkR(33,48)},
-  3: {L:mkR(5,17),  C:mkR(17,33), R:mkR(33,45)},
-  4: {L:mkR(2,17),  C:mkR(17,33), R:mkR(33,48)},
-  5: {L:mkR(2,17),  C:mkR(17,33), R:mkR(33,48)},
-  6: {L:mkR(1,17),  C:mkR(17,24), R:mkR(24,31), R2:mkR(33,49)}
-};
-
-var ALL_BLOCKS = {1:F1_BLOCKS, 2:F2_BLOCKS, 3:F3_BLOCKS};
+var ALL_BLOCKS = {1:F1_BLOCKS};
 
 /* parseSeatKey: SEAT_DATA 배열로 유효성 검사 */
 var SEAT_DATA={};
-[1,2,3].forEach(function(fl){
+[1].forEach(function(fl){
   SEAT_DATA[fl]={};
   var blocks=ALL_BLOCKS[fl];
   Object.keys(blocks).forEach(function(row){

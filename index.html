@@ -1445,7 +1445,7 @@ border:1px solid #aa77ff;
   <div class="cell"><span class="actor-badge badge-seungyun">한승윤</span></div>
   <div class="cell"><span class="actor-badge badge-jooill">김주일</span></div>
   <div class="cell"><span class="actor-badge badge-sungryong">양성령</span></div>
-  <div class="cell"><span class="actor-badge badge-jihun">김지훈</span></div>
+  <div class="cell"><span class="actor-badge badge-jihun">박태성</span></div>
   <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input", style="flex:1;min-width:0;", id="inp-s87" autocomplete="off"><button onclick="confirmSeat('s87')" style="flex-shrink:0;background:var(--red);color:#fff;border:none;border-radius:2px;font-size:7px;font-weight:900;padding:2px 3px;cursor:pointer;">✓</button></div><div class="seat-tags" id="tags-s87"></div></div>
   <div class="cell"><button class="copy-btn" onclick="copyCast('s87')">🎸</button></div>
   </div>    
@@ -1457,7 +1457,7 @@ border:1px solid #aa77ff;
   <div class="cell"><span class="actor-badge badge-seungyun">한승윤</span></div>
   <div class="cell"><span class="actor-badge badge-jooill">김주일</span></div>
   <div class="cell"><span class="actor-badge badge-sungryong">양성령</span></div>
-  <div class="cell"><span class="actor-badge badge-jihun">김지훈</span></div>
+  <div class="cell"><span class="actor-badge badge-jihun">고철</span></div>
   <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input", style="flex:1;min-width:0;", id="inp-s88" autocomplete="off"><button onclick="confirmSeat('s88')" style="flex-shrink:0;background:var(--red);color:#fff;border:none;border-radius:2px;font-size:7px;font-weight:900;padding:2px 3px;cursor:pointer;">✓</button></div><div class="seat-tags" id="tags-s88"></div></div>
   <div class="cell"><button class="copy-btn" onclick="copyCast('s88')">🎸</button></div>
   </div>    
@@ -1940,11 +1940,11 @@ var SEAT_DATA = {};
 });
 
 var COLORS = [
-  { bg: '#d42b2b', border: '#a01a1a' },
-  { bg: '#2b6dd4', border: '#1a48a0' },
-  { bg: '#d48e2b', border: '#a06010' },
-  { bg: '#8e2bd4', border: '#601aa0' },
-  { bg: '#2bd48e', border: '#10a060' }
+  { bg: '#e6f0ff', border: '#b3d1ff' }, // 1회 등록 (가장 연함)
+  { bg: '#99c2ff', border: '#66a3ff' }, // 2회 등록
+  { bg: '#4d94ff', border: '#1a75ff' }, // 3회 등록
+  { bg: '#005ce6', border: '#0047b3' }, // 4회 등록
+  { bg: '#003380', border: '#002255' }  // 5회 이상 (가장 진함)
 ];
 
 var showSeats = JSON.parse(localStorage.getItem('6pm_tickets_v1') || '{}');

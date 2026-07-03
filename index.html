@@ -2226,29 +2226,42 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function copyCast(sid){
-  var rowEl=document.querySelector('.row[data-sid="'+sid+'"]');if(!rowEl)return;
-  var date=(rowEl.querySelector('.cell.date')||{}).textContent||'';
-  var day=(rowEl.querySelector('.cell.day')||{}).textContent||'';
-  var time=(rowEl.querySelector('.cell.time')||{}).textContent||'';
-  var info=SHOW_INFO[sid]||{};
-  function get(k){return ACTOR_NAMES[k]||k||'추후공지';}
-  var seatArr=(showSeats[sid]||[]).slice();
-  var text='🎸 뮤지컬 6시 퇴근\n'
-    +'📅 '+date.trim()+' ('+day.trim()+') '+time.trim()+'\n'
-    +get(info.billy)+' / '+get(info.michael)+' / '+get(info.debbie)+' / '+get(info.mrs)+' / '+get(info.dad)+' / '+get(info.grandma)+' / '+get(info.adult);
-  if(seatArr.length)text+='\n좌석: '+seatArr.join(', ');
-  var btn=rowEl.querySelector('.copy-btn');
-  function onDone(){if(btn){btn.textContent='✅';setTimeout(function(){btn.textContent='🎸';},1500);}}
-  if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){
-    navigator.clipboard.writeText(text).then(onDone).catch(function(){fallbackCopy(text,onDone);});
-  }else{fallbackCopy(text,onDone);}
-}
-function fallbackCopy(text,cb){
-  var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');
-  ta.style.cssText='position:fixed;top:-9999px;left:-9999px;';
-  document.body.appendChild(ta);ta.focus();ta.select();
-  try{document.execCommand('copy');}catch(e){}
-  document.body.removeChild(ta);if(cb)cb();
+  var rowEl = document.querySelector('.row[data-sid="'+sid+'"]');
+  if(!rowEl) return;
+  
+  var date = (rowEl.querySelector('.cell.date') || {}).textContent || '';
+  var day = (rowEl.querySelector('.cell.day') || {}).textContent || '';
+  var time = (rowEl.querySelector('.cell.time') || {}).textContent || '';
+  
+  // [수정된 부분] .actor-badge 클래스를 가진 span 태그들을 모두 가져옵니다.
+  var badges = rowEl.querySelectorAll('.actor-badge');
+  var actors = [];
+  
+  // 만약 배지가 채워져 있다면 한글 이름을 배열에 담고, 없으면 '추후공지'로 처리합니다.
+  for (var i = 0; i < 7; i++) {
+    if (badges[i] && badges[i].textContent) {
+      actors.push(badges[i].textContent.trim());
+    } else {
+      actors.push('추후공지');
+    }
+  }
+  
+  var seatArr = (showSeats[sid] || []).slice();
+  
+  var text = '🎸 뮤지컬 6시 퇴근\n'
+    + '📅 ' + date.trim() + ' (' + day.trim() + ') ' + time.trim() + '\n'
+    + actors.join(' / '); // 가져온 한글 이름들을 ' / '로 묶어줍니다.
+    
+  if(seatArr.length) text += '\n좌석: ' + seatArr.join(', ');
+  
+  var btn = rowEl.querySelector('.copy-btn');
+  function onDone(){ if(btn){ btn.textContent='✅'; setTimeout(function(){ btn.textContent='🎸'; }, 1500); } }
+  
+  if(navigator.clipboard && typeof navigator.clipboard.writeText === 'function'){
+    navigator.clipboard.writeText(text).then(onDone).catch(function(){ fallbackCopy(text, onDone); });
+  } else {
+    fallbackCopy(text, onDone);
+  }
 }
 
 var sel={bogo:null,eunho:null,dayeon:null,jiseok:null,seongjun:null,yeongmi:null,juyeon:null};
